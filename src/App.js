@@ -1,22 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import SplitPane from 'react-split-pane';
+import Header from 'Header';
+import LeftPane from 'LeftPane';
+import styled from 'styled-components';
+
+const RightContainer = styled.div`
+  height: 100%;
+  background: darkslategrey;
+`
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <SplitPane  split="horizontal" defaultSize={100} allowResize={false}>
+          <Header></Header>
+          <SplitPane split="vertical" defaultSize={450} minSize={450} maxSize={500} step={10}>
+            <LeftPane></LeftPane>
+            <RightContainer>Right</RightContainer>
+          </SplitPane>
+        </SplitPane>
       </header>
     </div>
   );
