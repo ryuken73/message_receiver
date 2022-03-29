@@ -19,12 +19,12 @@ export const katalkTreeSlice = createSlice({
         setKatalkTopFolderAction: (state, action) => {
             const {payload} = action;
             const {name} = payload
-            state.katalkTopFolder = {id: getNextId(), name};
+            state.katalkTopFolder = {nodeId: getNextId(), name};
         },
         addKatalkRoomAction: (state, action) => {
             const {payload} = action;
             const {roomName} = payload
-            state.katalkRooms.push({id: getNextId(), roomName});
+            state.katalkRooms.push({nodeId: getNextId(), roomName});
         },
         addKatalkMessageAction: (state, action) => {
             const {payload} = action;

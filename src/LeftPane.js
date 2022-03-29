@@ -54,11 +54,11 @@ function LeftPane() {
             expanded={["0"]}
             onNodeSelect={handleNodeSelect}
             >
-                {katalkTopFolder.id !== undefined ? (
-                    <TreeItem nodeId={katalkTopFolder.id} label={katalkTopFolder.name}>
+                {katalkTopFolder.nodeId !== undefined ? (
+                    <TreeItem nodeId={katalkTopFolder.nodeId} label={katalkTopFolder.name}>
                         {katalkRooms.map(katalkRoom => (
                             <TreeItem 
-                                nodeId={katalkRoom.id} 
+                                nodeId={katalkRoom.nodeId} 
                                 label={katalkRoom.roomName} 
                             />
                         ))}
