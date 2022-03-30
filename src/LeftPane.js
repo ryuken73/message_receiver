@@ -13,7 +13,7 @@ const {SOCKET_SERVER_URL, EVENT_NEW_MESSAGES} = constants;
 const LeftContainer = styled.div`
     box-sizing: border-box;
     height: 100%;
-    background: darkslategrey;
+    background: #382121;
     text-align: left;
     padding-top: 20px;
 `

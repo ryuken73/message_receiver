@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import useAppState from 'hooks/useAppState';
 
 const HeaderContainer = styled.div`
+    background: #340303;
     width: 100%;
     display: flex;
     justify-content: center;
