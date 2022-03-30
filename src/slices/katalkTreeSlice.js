@@ -36,6 +36,12 @@ export const katalkTreeSlice = createSlice({
             const lastUpdatedTimestamp = Date.now();
             state.katalkRooms.push({nodeId: getNextId(), roomName, lastUpdatedTimestamp});
         },
+        delKatalkRoomAction: (state, action) => {
+            const {payload} = action;
+            const {roomName} = payload;
+            state.katalkRooms = state.katalkRooms.filter(room => room.roomName !== roomName);
+            state.katalkMessages[roomName] = [];
+        },
         addKatalkMessageAction: (state, action) => {
             const {payload} = action;
             const {roomName, message} = payload;
@@ -65,6 +71,7 @@ export const {
     setKatalkTopFolderAction,
     setSelectedNodeIdAction,
     addKatalkRoomAction,
+    delKatalkRoomAction,
     addKatalkMessageAction,
     clearKatalkMessageAction,
 } = katalkTreeSlice.actions;

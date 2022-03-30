@@ -1,6 +1,9 @@
-import React from 'react'
-import styled, {keyframes, css} from 'styled-components'
+import React from 'react';
+import styled, {keyframes, css} from 'styled-components';
+import IconButton from '@mui/material/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
 import TreeItem from '@mui/lab/TreeItem';
+import useKatalkTreeState from 'hooks/useKatalkTreeState';
 
 const ShowUpdated = keyframes`
   from {
@@ -16,6 +19,14 @@ const updateStyle = css`
   animation-delay: 0.5s;
   animation-duration: 5s;
   animation-fill-mode: both;
+`
+const Container = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+`
+const StyledIconButton = styled(IconButton)`
+    padding: 3px !important;
 `
 const StyledTreeItem = styled(TreeItem)`
     width: fit-content;
@@ -51,16 +62,25 @@ const StyledTreeItem = styled(TreeItem)`
 `
 
 const KatalkRoom = props => {
-    const {lastUpdatedTimestamp} = props;
+    const {label:roomName, lastUpdatedTimestamp} = props;
     const [lastUpdated, setLastUpdated] = React.useState();
     React.useEffect(() => {
         setLastUpdated(lastUpdatedTimestamp)
     },[lastUpdatedTimestamp])
+    const {delKatalkRoom} = useKatalkTreeState();
+    const clickRemoveRoom = React.useCallback(() => {
+        delKatalkRoom(roomName);
+    },[delKatalkRoom, roomName])
     return (
-        <StyledTreeItem
-            {...props}
-        >
-        </StyledTreeItem>
+        <Container>
+            <StyledTreeItem
+                {...props}
+            >
+            </StyledTreeItem>
+            <StyledIconButton onClick={clickRemoveRoom} sx={{color: 'red'}}>
+                <ClearIcon fontSize="small"></ClearIcon>
+            </StyledIconButton>
+        </Container>
     )
 }
 

@@ -5,6 +5,7 @@ import {
     setKatalkTopFolderAction,
     setSelectedNodeIdAction,
     addKatalkRoomAction,
+    delKatalkRoomAction,
     addKatalkMessageAction,
     clearKatalkMessageAction,
 } from 'slices/katalkTreeSlice';
@@ -32,6 +33,11 @@ export default function useKatalkTreeState() {
         dispatch(addKatalkRoomAction({roomName}));
     },[dispatch, katalkRooms])
 
+    const delKatalkRoom = React.useCallback(roomName => {
+        dispatch(delKatalkRoomAction({roomName}));
+    },[dispatch])
+        
+
     const addKatalkMessages = React.useCallback((roomName, messages) => {
         messages.forEach(message => {
             dispatch(addKatalkMessageAction({roomName, message}));
@@ -56,6 +62,7 @@ export default function useKatalkTreeState() {
         orderedKatalkRooms,
         initializeTopFolder,
         addKatalkRoom,
+        delKatalkRoom,
         addKatalkMessages,
         clearKatalkMessages,
         setSelecteNodeId

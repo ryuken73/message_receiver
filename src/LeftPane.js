@@ -61,7 +61,7 @@ function LeftPane() {
             aria-label="file system navigator"
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
-            sx={{ height: '100%', flexGrow: 1, overflowY: 'auto' }}
+            sx={{ height: '100%', flexGrow: 1 }}
             expanded={["0"]}
             onNodeSelect={handleNodeSelect}
             >
