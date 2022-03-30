@@ -11,10 +11,11 @@ import constants from 'config/constants';
 const {SOCKET_SERVER_URL, EVENT_NEW_MESSAGES} = constants;
 
 const LeftContainer = styled.div`
+    box-sizing: border-box;
     height: 100%;
     background: darkslategrey;
     text-align: left;
-    padding-top: 10px;
+    padding-top: 20px;
 `
 function LeftPane() {
     const {setSocketConnected} = useAppState();
