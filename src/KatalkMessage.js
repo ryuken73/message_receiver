@@ -33,7 +33,6 @@ const splitMessage = message => {
         return [];
     } 
     const [result]  = [...message.matchAll(REGEXP_MESSAGE)]; 
-    console.log(result)
     const [originalMessage, whoStr, timeStr, restStr] = result;
     return [whoStr, timeStr, restStr]
 }
@@ -42,7 +41,6 @@ const KatalkMessage = props => {
     const {message} = props;
     const isDateMessage = isDate(message);
     const [whoStr, timeStr, restStr] = splitMessage(message);
-    console.log(message)
     return (
         <MessageContainer>
             {isDateMessage ? (

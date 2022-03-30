@@ -1,5 +1,8 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {genSequence} from 'lib/util'
+import {genSequence} from 'lib/util';
+import constants from 'config/constants';
+
+const {MAX_RETAIN_MESSAGES} = constants
 
 const initialState = {
     katalkTopFolder: {},
@@ -11,6 +14,11 @@ const initialState = {
 const sequence = genSequence();
 const getNextId = () => {
     return sequence.next().value.toString();
+}
+const tailArray = (array, tailCount) => {
+    return array.filter((element, index) => {
+        return index >= array.length - tailCount
+    })
 }
 
 export const katalkTreeSlice = createSlice({
@@ -36,6 +44,7 @@ export const katalkTreeSlice = createSlice({
             } else {
                 state.katalkMessages[roomName] = [message]
             }
+            state.katalkMessages[roomName] = tailArray(state.katalkMessages[roomName], MAX_RETAIN_MESSAGES);
             const katalkRoom = state.katalkRooms.find(katalkRoom => katalkRoom.roomName === roomName)
             katalkRoom.lastUpdatedTimestamp = Date.now();
         },
