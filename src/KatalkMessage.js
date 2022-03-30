@@ -30,12 +30,12 @@ const Message = styled.div`
 `
 
 const splitMessage = message => {
-    if(isDate(message)) {
-        return [];
-    } 
     const [result]  = [...message.matchAll(REGEXP_MESSAGE)]; 
-    const [originalMessage, whoStr, timeStr, restStr] = result;
-    return [whoStr, timeStr, restStr]
+    if(Array.isArray(result)){
+        const [originalMessage, whoStr, timeStr, restStr] = result;
+        return [whoStr, timeStr, restStr]
+    }
+    return []
 }
 
 const KatalkMessage = props => {
@@ -46,7 +46,9 @@ const KatalkMessage = props => {
         <MessageContainer>
             {isDateMessage ? (
                 <DateMessage>{message}</DateMessage>
-            ):(
+            ): whoStr === undefined ? (
+                <Title>{message}</Title> 
+            ): (
                 <React.Fragment>
                     <Title>{whoStr}{timeStr}</Title>
                     <Message>{restStr}</Message>
