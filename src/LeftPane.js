@@ -22,8 +22,11 @@ function LeftPane() {
     const {
         katalkTopFolder,
         katalkRooms,
+        orderedKatalkRooms,
+        initializeTopFolder,
         addKatalkRoom,
-        addKatalkMessages
+        addKatalkMessages,
+        setSelecteNodeId
     } = useKatalkTreeState();
 
     const handleMessages = React.useCallback(newMessages => {
@@ -33,7 +36,11 @@ function LeftPane() {
     },[addKatalkRoom, addKatalkMessages])
 
     const handleNodeSelect = React.useCallback((event, nodeId) => {
-        console.log(nodeId)
+        setSelecteNodeId(nodeId)
+    },[])
+
+    React.useEffect(() => {
+        initializeTopFolder();
     },[])
 
     React.useEffect(() => {
@@ -43,6 +50,8 @@ function LeftPane() {
             socket.off(EVENT_NEW_MESSAGES, handleMessages)
         }
     },[socket, handleMessages])
+
+    console.log(orderedKatalkRooms)
 
     return (
         <LeftContainer>
@@ -56,8 +65,9 @@ function LeftPane() {
             >
                 {katalkTopFolder.nodeId !== undefined ? (
                     <TreeItem nodeId={katalkTopFolder.nodeId} label={katalkTopFolder.name}>
-                        {katalkRooms.map(katalkRoom => (
+                        {orderedKatalkRooms.map(katalkRoom => (
                             <TreeItem 
+                                key={katalkRoom.nodeId}
                                 nodeId={katalkRoom.nodeId} 
                                 label={katalkRoom.roomName} 
                             />

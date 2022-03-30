@@ -1,5 +1,5 @@
 export const genSequence = function* (){
-    let sequence = 0;
+    let sequence = 1;
     while(true){
         yield sequence++;
     }

@@ -1,64 +1,26 @@
 import React from 'react'
-import styled from 'styled-components'
-import TreeView from '@mui/lab/TreeView';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeItem from '@mui/lab/TreeItem';
-import useAppState from 'hooks/useAppState';
-import useSocketIO from 'hooks/useSocketIO';
+import styled from '@emotion/styled';
 import useKatalkTreeState from 'hooks/useKatalkTreeState';
-import constants from 'config/constants';
-const {SOCKET_SERVER_URL, EVENT_NEW_MESSAGES} = constants;
 
-const LeftContainer = styled.div`
+const RightContainer = styled.div`
     height: 100%;
     background: darkslategrey;
     text-align: left;
-    padding-top: 10px;
+    padding: 10px;
+    font-size: 15px;
+    overflow-x: auto;
 `
 function RightPane() {
-    const {setSocketConnected} = useAppState();
-    const {socket} = useSocketIO({hostAddress: SOCKET_SERVER_URL, setSocketConnected});
     const {
-        katalkTopFolder,
-        katalkRooms,
-        addKatalkRoom,
-        addKatalkMessages
+        messagesOfSelectedRoom=[]
     } = useKatalkTreeState();
 
-    const handleMessages = React.useCallback(newMessages => {
-       const {room, messages}  = newMessages
-       addKatalkRoom(room);
-       addKatalkMessages(room, messages)
-    },[addKatalkRoom, addKatalkMessages])
-
-    React.useEffect(() => {
-        if(socket === null) return;
-        socket.on(EVENT_NEW_MESSAGES, handleMessages)
-        return () => {
-            socket.off(EVENT_NEW_MESSAGES, handleMessages)
-        }
-    },[socket, handleMessages])
-
     return (
-        <LeftContainer>
-            <TreeView
-            aria-label="file system navigator"
-            defaultCollapseIcon={<ExpandMoreIcon />}
-            defaultExpandIcon={<ChevronRightIcon />}
-            sx={{ height: '100%', flexGrow: 1, overflowY: 'auto' }}
-            >
-                {katalkTopFolder.id !== undefined ? (
-                    <TreeItem nodeId={katalkTopFolder.id} label={katalkTopFolder.name}>
-                        {katalkRooms.map(katalkRoom => (
-                            <TreeItem nodeId={katalkRoom.id} label={katalkRoom.roomName} />
-                        ))}
-                    </TreeItem>):
-                    <div></div>
-                }
-                
-            </TreeView>
-        </LeftContainer>
+        <RightContainer>
+            {messagesOfSelectedRoom.map(message => (
+                <div>{message}</div>
+            ))}
+        </RightContainer>
     )
 }
 

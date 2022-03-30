@@ -4,7 +4,8 @@ import {genSequence} from 'lib/util'
 const initialState = {
     katalkTopFolder: {},
     katalkRooms: [],
-    katalkMessages: {}
+    katalkMessages: {},
+    selectedNodeId: null
 }
 
 const sequence = genSequence();
@@ -19,12 +20,13 @@ export const katalkTreeSlice = createSlice({
         setKatalkTopFolderAction: (state, action) => {
             const {payload} = action;
             const {name} = payload
-            state.katalkTopFolder = {nodeId: getNextId(), name};
+            state.katalkTopFolder = {nodeId:"0", name};
         },
         addKatalkRoomAction: (state, action) => {
             const {payload} = action;
-            const {roomName} = payload
-            state.katalkRooms.push({nodeId: getNextId(), roomName});
+            const {roomName} = payload;
+            const lastUpdatedTimestamp = Date.now();
+            state.katalkRooms.push({nodeId: getNextId(), roomName, lastUpdatedTimestamp});
         },
         addKatalkMessageAction: (state, action) => {
             const {payload} = action;
@@ -34,15 +36,20 @@ export const katalkTreeSlice = createSlice({
             } else {
                 state.katalkMessages[roomName] = [message]
             }
-            // const roomMessages = state.katalkMessages[roomName] || [];
-            // roomMessages.push(message)
-            // state.katalkMessages[roomName] = roomMessages;
+            const katalkRoom = state.katalkRooms.find(katalkRoom => katalkRoom.roomName === roomName)
+            katalkRoom.lastUpdatedTimestamp = Date.now();
+        },
+        setSelectedNodeIdAction: (state, action) => {
+            const {payload} = action;
+            const {nodeId} = payload;
+            state.selectedNodeId = nodeId;
         }
     }
 })
 
 export const {
     setKatalkTopFolderAction,
+    setSelectedNodeIdAction,
     addKatalkRoomAction,
     addKatalkMessageAction
 } = katalkTreeSlice.actions;
