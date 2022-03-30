@@ -11,6 +11,7 @@ const isMessage = message => REGEXP_MESSAGE.test(message);
 
 const MessageContainer = styled.div``
 const DateMessage = styled.div`
+    display: inline-block;
     margin-top: 5px;
     margin-bottom: 5px;
     font-size: 18px;

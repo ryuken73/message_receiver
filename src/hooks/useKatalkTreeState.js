@@ -5,7 +5,8 @@ import {
     setKatalkTopFolderAction,
     setSelectedNodeIdAction,
     addKatalkRoomAction,
-    addKatalkMessageAction 
+    addKatalkMessageAction,
+    clearKatalkMessageAction,
 } from 'slices/katalkTreeSlice';
 
 const {KATALK_TOP_FOLDER_NAME} = constants;
@@ -37,6 +38,10 @@ export default function useKatalkTreeState() {
         })
     },[dispatch])
 
+    const clearKatalkMessages = React.useCallback(roomName => {
+        dispatch(clearKatalkMessageAction({roomName}))
+    },[dispatch])
+
     const setSelecteNodeId = React.useCallback(nodeId => {
         dispatch(setSelectedNodeIdAction({nodeId}));
     },[dispatch])
@@ -52,6 +57,7 @@ export default function useKatalkTreeState() {
         initializeTopFolder,
         addKatalkRoom,
         addKatalkMessages,
+        clearKatalkMessages,
         setSelecteNodeId
     }
 }

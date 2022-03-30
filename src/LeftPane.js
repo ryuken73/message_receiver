@@ -4,6 +4,7 @@ import TreeView from '@mui/lab/TreeView';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
+import KatalkRoom from 'KatalkRoom';
 import useAppState from 'hooks/useAppState';
 import useSocketIO from 'hooks/useSocketIO';
 import useKatalkTreeState from 'hooks/useKatalkTreeState';
@@ -66,11 +67,13 @@ function LeftPane() {
             >
                 {katalkTopFolder.nodeId !== undefined ? (
                     <TreeItem nodeId={katalkTopFolder.nodeId} label={katalkTopFolder.name}>
-                        {orderedKatalkRooms.map(katalkRoom => (
-                            <TreeItem 
+                        {orderedKatalkRooms.map((katalkRoom, index) => (
+                            <KatalkRoom 
                                 key={katalkRoom.nodeId}
                                 nodeId={katalkRoom.nodeId} 
                                 label={katalkRoom.roomName} 
+                                lastUpdatedTimestamp={katalkRoom.lastUpdatedTimestamp}
+                                index={index}
                             />
                         ))}
                     </TreeItem>):
