@@ -10,6 +10,7 @@ const dev =  {
 }
 
 const prd = {
+    ...dev,
     SOCKET_SERVER: ''
 }
 
