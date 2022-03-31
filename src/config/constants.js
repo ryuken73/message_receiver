@@ -1,4 +1,4 @@
-const CONSTANTS =  {
+const dev =  {
     KATALK_TOP_FOLDER_NAME: '카카오톡',
     MAX_RETAIN_MESSAGES: 200,
     KATALK_MESSAGE_REGEXP:{
@@ -7,7 +7,10 @@ const CONSTANTS =  {
     },
     SOCKET_SERVER: 'https://autoeditdev.sbs.co.kr',
     EVENT_NEW_MESSAGES: 'post:newMessages',
-
 }
 
-export default CONSTANTS;
+const prd = {
+    SOCKET_SERVER: ''
+}
+
+export default process.env.NODE_ENV === 'development' ? dev:prd;
