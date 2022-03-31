@@ -1,4 +1,5 @@
 import React from 'react';
+import MD5 from 'crypto-js/md5';
 import {useSelector, useDispatch} from 'react-redux';
 import constants from 'config/constants'
 import {
@@ -7,8 +8,11 @@ import {
     addKatalkRoomAction,
     delKatalkRoomAction,
     addKatalkMessageAction,
+    appendKatalkMessagesAction,
+    unshiftKatalkMessagesAction,
     clearKatalkMessageAction,
 } from 'slices/katalkTreeSlice';
+import { Difference } from '@mui/icons-material';
 
 const {KATALK_TOP_FOLDER_NAME} = constants;
 
@@ -37,6 +41,55 @@ export default function useKatalkTreeState() {
         dispatch(delKatalkRoomAction({roomName}));
     },[dispatch])
         
+    const compareWithCurrentMessages = React.useCallback((roomName, newMessages) => {
+        console.log(`compare: ${roomName} ${newMessages}`)
+        const currentMessages = katalkMessages[roomName] || [];
+        const currentMessagesHash = MD5(currentMessages.join()).toString();
+        const newMessagesHash = MD5(newMessages.join()).toString();
+        // initial load
+        if(currentMessages.length === 0){
+            return [constants.NEW_MESSAGE_TYPE.INITIAL, newMessages]
+        }
+        console.log(`diff hash: ${currentMessagesHash}, ${newMessagesHash}`)
+        console.log(`diff length: ${currentMessages.length}, ${newMessages.length}`)
+        // console.log(`diff message:`, currentMessages, newMessages);
+        // no messages added. nothing changed
+        if(currentMessagesHash === newMessagesHash){
+            return [constants.NEW_MESSAGE_TYPE.EQUAL, []]
+        }
+        const currentStart = currentMessages.values().next().value;
+        const newStart = newMessages.values().next().value;
+        console.log(`diff:`, currentStart, newStart)
+        // new message appended to bottom
+        if(currentStart === newStart){
+            const currentEndMessage = [...currentMessages].reverse().values().next().value;
+            const newFromIndex = newMessages.findIndex(message => message === currentEndMessage)
+            const newAppened = newMessages.slice(newFromIndex+1);
+            return [constants.NEW_MESSAGE_TYPE.NEW_BOTTOM, newAppened]
+        }
+        const currentEnd = [...currentMessages].reverse().values().next().value;
+        const newEnd = [...newMessages].reverse().values().next().value;
+        if(currentEnd === newEnd){
+            // new message added to begining of chatroom
+            if(newMessages.includes(currentStart)){
+                const newToIndex = newMessages.findIndex(message => message === currentStart);
+                const newFrontMessages = newMessages.slice(0, newToIndex);
+                return [constants.NEW_MESSAGE_TYPE.NEW_TOP, newFrontMessages]
+            // no messages added but shrink (happens when re-open chatroom)
+            } else {
+                return [constants.NEW_MESSAGE_TYPE.EQUAL_SHIFT_BOTTOM, []]
+            }
+        }
+        return ['other',[]];
+    },[katalkMessages])
+
+    const appendKatalkMessages = React.useCallback((roomName, messages) => {
+        dispatch(appendKatalkMessagesAction({roomName, messages}))
+    },[dispatch])
+
+    const unshiftKatalkMessages = React.useCallback((roomName, messages) => {
+        dispatch(unshiftKatalkMessagesAction({roomName, messages}))
+    },[dispatch])
 
     const addKatalkMessages = React.useCallback((roomName, messages) => {
         messages.forEach(message => {
@@ -52,6 +105,11 @@ export default function useKatalkTreeState() {
         dispatch(setSelectedNodeIdAction({nodeId}));
     },[dispatch])
 
+    const getNumberOfRoomMessages = React.useCallback(roomName => {
+        const messages = katalkMessages[roomName] || []
+        return messages.length
+    },[katalkMessages])
+
     return {
         katalkTopFolder,
         katalkRooms,
@@ -64,7 +122,11 @@ export default function useKatalkTreeState() {
         addKatalkRoom,
         delKatalkRoom,
         addKatalkMessages,
+        compareWithCurrentMessages,
+        appendKatalkMessages,
+        unshiftKatalkMessages,
         clearKatalkMessages,
-        setSelecteNodeId
+        setSelecteNodeId,
+        getNumberOfRoomMessages
     }
 }

@@ -32,14 +32,25 @@ function LeftPane() {
         initializeTopFolder,
         addKatalkRoom,
         addKatalkMessages,
+        appendKatalkMessages,
+        unshiftKatalkMessages,
+        compareWithCurrentMessages,
         setSelecteNodeId
     } = useKatalkTreeState();
 
     const handleMessages = React.useCallback(newMessages => {
-       const {room, messages}  = newMessages
-       addKatalkRoom(room);
-       addKatalkMessages(room, messages)
-    },[addKatalkRoom, addKatalkMessages])
+        const {room, messages}  = newMessages
+        addKatalkRoom(room);
+        const [diffType, newAdded] = compareWithCurrentMessages(room, messages);
+        console.log(`diffType: ${diffType}`);
+        if(diffType === constants.NEW_MESSAGE_TYPE.EQUAL){
+            return
+        }
+        if(diffType === constants.NEW_MESSAGE_TYPE.NEW_TOP){
+            unshiftKatalkMessages(room, newAdded)
+        }
+        appendKatalkMessages(room, newAdded)
+    },[addKatalkRoom, appendKatalkMessages, unshiftKatalkMessages, compareWithCurrentMessages])
 
     const handleNodeSelect = React.useCallback((event, nodeId) => {
         setSelecteNodeId(nodeId)

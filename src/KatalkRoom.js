@@ -28,6 +28,10 @@ const Container = styled.div`
 const StyledIconButton = styled(IconButton)`
     padding: 3px !important;
 `
+const StyledText = styled.div`
+    font-size: 15px;
+`
+
 const StyledTreeItem = styled(TreeItem)`
     width: fit-content;
     .MuiTreeItem-content {
@@ -46,7 +50,7 @@ const StyledTreeItem = styled(TreeItem)`
         background: transparent !important;
         .MuiTreeItem-label {
             border-radius: 3px;
-            background: maroon;
+            background: darkgreen;
         }
     }
     .MuiTreeItem-content.Mui-selected.Mui-focused {
@@ -72,7 +76,7 @@ const KatalkRoom = props => {
     React.useEffect(() => {
         setLastUpdated(lastUpdatedTimestamp)
     },[lastUpdatedTimestamp])
-    const {delKatalkRoom} = useKatalkTreeState();
+    const {delKatalkRoom, getNumberOfRoomMessages} = useKatalkTreeState();
     const clickRemoveRoom = React.useCallback(() => {
         delKatalkRoom(roomName);
     },[delKatalkRoom, roomName])
@@ -85,6 +89,9 @@ const KatalkRoom = props => {
                 {...props}
             >
             </StyledTreeItem>
+            <StyledText>
+                [{getNumberOfRoomMessages(roomName)}]
+            </StyledText>
         </Container>
     )
 }

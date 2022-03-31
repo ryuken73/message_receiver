@@ -42,6 +42,30 @@ export const katalkTreeSlice = createSlice({
             state.katalkRooms = state.katalkRooms.filter(room => room.roomName !== roomName);
             state.katalkMessages[roomName] = [];
         },
+        appendKatalkMessagesAction: (state, action) => {
+            const {payload} = action;
+            const {roomName, messages} = payload;
+            if(state.katalkMessages[roomName] === undefined){
+                state.katalkMessages[roomName] = messages
+            } else {
+                state.katalkMessages[roomName] = [...state.katalkMessages[roomName], ...messages]
+            }
+            state.katalkMessages[roomName] = tailArray(state.katalkMessages[roomName], MAX_RETAIN_MESSAGES);
+            const katalkRoom = state.katalkRooms.find(katalkRoom => katalkRoom.roomName === roomName)
+            katalkRoom.lastUpdatedTimestamp = Date.now();
+        },
+        unshiftKatalkMessagesAction: (state, action) => {
+            const {payload} = action;
+            const {roomName, messages} = payload;
+            if(state.katalkMessages[roomName] === undefined){
+                state.katalkMessages[roomName] = messages
+            } else {
+                state.katalkMessages[roomName] = [...messages, ...state.katalkMessages[roomName]]
+            }
+            state.katalkMessages[roomName] = tailArray(state.katalkMessages[roomName], MAX_RETAIN_MESSAGES);
+            const katalkRoom = state.katalkRooms.find(katalkRoom => katalkRoom.roomName === roomName)
+            katalkRoom.lastUpdatedTimestamp = Date.now();
+        },
         addKatalkMessageAction: (state, action) => {
             const {payload} = action;
             const {roomName, message} = payload;
@@ -72,6 +96,8 @@ export const {
     setSelectedNodeIdAction,
     addKatalkRoomAction,
     delKatalkRoomAction,
+    appendKatalkMessagesAction,
+    unshiftKatalkMessagesAction,
     addKatalkMessageAction,
     clearKatalkMessageAction,
 } = katalkTreeSlice.actions;
