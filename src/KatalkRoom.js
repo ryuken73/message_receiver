@@ -31,6 +31,11 @@ const StyledIconButton = styled(IconButton)`
 const StyledTreeItem = styled(TreeItem)`
     width: fit-content;
     .MuiTreeItem-content {
+        .MuiTreeItem-iconContainer {
+            width: 0px;
+        }
+    }
+    .MuiTreeItem-content {
         width: fit-content;
         .MuiTreeItem-label {
             width: auto;
@@ -73,13 +78,13 @@ const KatalkRoom = props => {
     },[delKatalkRoom, roomName])
     return (
         <Container>
+            <StyledIconButton onClick={clickRemoveRoom} sx={{color: 'red'}}>
+                <ClearIcon fontSize="small"></ClearIcon>
+            </StyledIconButton>
             <StyledTreeItem
                 {...props}
             >
             </StyledTreeItem>
-            <StyledIconButton onClick={clickRemoveRoom} sx={{color: 'red'}}>
-                <ClearIcon fontSize="small"></ClearIcon>
-            </StyledIconButton>
         </Container>
     )
 }
