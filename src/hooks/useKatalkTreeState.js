@@ -80,7 +80,20 @@ export default function useKatalkTreeState() {
                 return [constants.NEW_MESSAGE_TYPE.EQUAL_SHIFT_BOTTOM, []]
             }
         }
-        return ['other',[]];
+        if(newMessages.includes(currentStart)){
+            const currentEndMessage = [...currentMessages].reverse().values().next().value;
+            const newFromIndex = newMessages.findIndex(message => message === currentEndMessage)
+            const newAppened = newMessages.slice(newFromIndex+1);
+            return [constants.NEW_MESSAGE_TYPE.NEW_TOP_AND_BOTTOM, newAppened]
+        }
+        if(newMessages.includes(currentEnd)){
+            const currentEndMessage = [...currentMessages].reverse().values().next().value;
+            const newFromIndex = newMessages.findIndex(message => message === currentEndMessage)
+            const newAppened = newMessages.slice(newFromIndex+1);
+            return [constants.NEW_MESSAGE_TYPE.NEW_SHIFT_BOTTOM, newAppened]
+        } else {
+            return [constants.NEW_MESSAGE_TYPE.NEW_JUMP_TO_BOTTOM, newMessages]
+        }
     },[katalkMessages])
 
     const appendKatalkMessages = React.useCallback((roomName, messages) => {

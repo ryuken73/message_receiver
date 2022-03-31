@@ -14,7 +14,7 @@ const dev =  {
         "NEW_TOP":"4",
         "NEW_SHIFT_BOTTOM":"5",
         "NEW_TOP_AND_BOTTOM":"6",
-        "JUMP_BOTTOM":"7",
+        "NEW_JUMP_TO_BOTTOM":"7",
         "INITIAL":"99"
     }
 }

@@ -48,6 +48,7 @@ function LeftPane() {
         }
         if(diffType === constants.NEW_MESSAGE_TYPE.NEW_TOP){
             unshiftKatalkMessages(room, newAdded)
+            return
         }
         appendKatalkMessages(room, newAdded)
     },[addKatalkRoom, appendKatalkMessages, unshiftKatalkMessages, compareWithCurrentMessages])
