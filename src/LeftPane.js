@@ -17,6 +17,10 @@ const LeftContainer = styled.div`
     background: #382121;
     text-align: left;
     padding-top: 20px;
+    overflow-y: auto;
+`
+const StyledTreeItem = styled(TreeItem)`
+    width: fit-content;
 `
 function LeftPane() {
     const {setSocketConnected} = useAppState();
@@ -66,7 +70,7 @@ function LeftPane() {
             onNodeSelect={handleNodeSelect}
             >
                 {katalkTopFolder.nodeId !== undefined ? (
-                    <TreeItem nodeId={katalkTopFolder.nodeId} label={katalkTopFolder.name}>
+                    <StyledTreeItem nodeId={katalkTopFolder.nodeId} label={katalkTopFolder.name}>
                         {orderedKatalkRooms.map((katalkRoom, index) => (
                             <KatalkRoom 
                                 key={katalkRoom.nodeId}
@@ -76,7 +80,7 @@ function LeftPane() {
                                 index={index}
                             />
                         ))}
-                    </TreeItem>):
+                    </StyledTreeItem>):
                     <div></div>
                 }
                 
